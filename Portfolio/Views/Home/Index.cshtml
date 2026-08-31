@@ -12,7 +12,7 @@
                 </div>
                 <div class="header-titles">
                     <h2>@Model.MasterAbout.Name</h2>
-                    <h4>Web Designer</h4>
+                    <h4>@Model.MasterPositions.FirstOrDefault(x=>x.IsPrimary).Name</h4>
                 </div>
             </div>
 
@@ -57,10 +57,15 @@
 
             <div class="social-links">
                 <ul>
-                    <li><a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+
+                    @foreach (var item in Model.MasterSocialMedia)
+                    {
+                        <li><a href="@item.Link" target="_blank"><i class="@item.Icon"></i></a></li>
+                    }
+                    @*   <li><a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
                     <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
                     <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                </ul>
+              *@   </ul>
             </div>
 
             <div class="header-buttons">
@@ -95,13 +100,20 @@
                                 <div class="title-block">
                                     <h2>@Model.MasterAbout.Name</h2>
                                     <div class="owl-carousel text-rotation">
+                                        @foreach(var item in Model.MasterPositions)
+                                        {
+                                            <div class="item">
+                                                <div class="sp-subtitle">@item.Name</div>
+                                            </div>
+                                        }
+                                        @* 
                                         <div class="item">
                                             <div class="sp-subtitle">Web Designer</div>
                                         </div>
 
                                         <div class="item">
                                             <div class="sp-subtitle">Frontend-developer</div>
-                                        </div>
+                                        </div> *@
                                     </div>
                                 </div>
                             </div>
@@ -113,8 +125,9 @@
                 <!-- About Me Subpage -->
                 <section data-id="about-me" class="animated-section">
                     <div class="page-title">
-                        <h2>About <span>Me</span></h2>
-                    </div>
+                        <h2>About <span>Me</span></h2> 
+@*                         @Html.Raw(Model.MasterTitles.FirstOrDefault(x => x.Keyword == "AboutMeFinal")?.Title)
+ *@                    </div>
 
                     <div class="section-content">
                         <!-- Personal Information -->

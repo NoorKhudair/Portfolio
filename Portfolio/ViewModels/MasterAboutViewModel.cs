@@ -7,8 +7,8 @@
         public bool IsActive { get; set; }
 
         public string Name { get; set; }
-        public string ImageURL { get; set; }
-        public string CVURL { get; set; }
+        public string? ImageURL { get; set; }
+        public string? CVURL { get; set; }
 
         public string Desc { get; set; }
 
@@ -22,7 +22,7 @@
 
         public DateTime DateOfBirth { get; set; }
         public int Age { get; set; }
-        public IFormFile ImageFile { get; set; }
-        public IFormFile   CVFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
+        public IFormFile?   CVFile { get; set; }
     }
 }

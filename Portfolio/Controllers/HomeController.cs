@@ -11,22 +11,37 @@ namespace Portfolio.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         IRepository <MasterAbout> MasterAboutRepository;
+        IRepository<MasterTitles> MasterTitlesRepository;
+        IRepository<MasterPositions> MasterPositionsRepository;
+        IRepository<MasterSocialMedia> MasterSocialMediaRepository;
 
-        public HomeController(ILogger<HomeController> logger,IRepository<MasterAbout> repository)
+
+        public HomeController(ILogger<HomeController> logger, IRepository<MasterAbout> repository, IRepository<MasterTitles> masterTitlesRepository, IRepository<MasterPositions> masterPositionsRepository, IRepository<MasterSocialMedia> masterSocialMediaRepository)
         {
             _logger = logger;
             MasterAboutRepository = repository;
+            MasterTitlesRepository = masterTitlesRepository;
+            MasterPositionsRepository = masterPositionsRepository;
+            MasterSocialMediaRepository = masterSocialMediaRepository;
         }
 
         public IActionResult Index()
         {
             
             var masterAboutData = MasterAboutRepository.GetAllClient().ToViewModelList().FirstOrDefault();
+            var masterTitlesData = MasterTitlesRepository.GetAllClient().ToViewModelList();
+            var masterPositionsData = MasterPositionsRepository.GetAllClient().ToViewModelList();
+            var masterSocialMediaData = MasterSocialMediaRepository.GetAllClient().ToViewModelList();
 
             var obj = new HomeViewModel
             {
-                MasterAbout = masterAboutData ?? new MasterAboutViewModel() // Fallback to avoid null
-            };
+                MasterAbout = masterAboutData ?? new MasterAboutViewModel(),
+                MasterTitle = masterTitlesData ,
+                MasterPositions = masterPositionsData ,
+                MasterSocialMedia = masterSocialMediaData ,
+
+
+            }; 
             return View(obj);
         }
 

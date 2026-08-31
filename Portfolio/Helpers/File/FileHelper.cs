@@ -22,7 +22,7 @@ namespace Portfolio.Helpers.File
             if (File != null)
             {
                 List<string> allowedExtensions = new List<string> {
-                            ".pdf", ". doc", ".docx"
+                                                        ".png", ". jpeg", ".jpg", ".gif"
                 };
 
 
@@ -70,7 +70,8 @@ namespace Portfolio.Helpers.File
             if (File != null)
             {
                 List<string> allowedExtensions = new List<string> {
-                            ".png", ". jpeg", ".jpg", ".gif"
+                                                ".pdf", ". doc", ".docx"
+
                 };
 
 

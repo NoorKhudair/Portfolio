@@ -10,15 +10,15 @@ using Portfolio.ViewModels;
 namespace Portfolio.Areas.Admin.Controllers
 {
     [Area("Admin")]
-        [Authorize]
+    [Authorize]
     public class MasterAboutController : Controller
     {
         IRepository<MasterAbout> Repository;
         IFileHelper FileHelper;
         public MasterAboutController(IRepository<MasterAbout> repository, IFileHelper fileHelper)
         {
-Repository = repository;
-FileHelper = fileHelper;
+            Repository = repository;
+            FileHelper = fileHelper;
         }
 
 
@@ -45,51 +45,32 @@ FileHelper = fileHelper;
         [ValidateAntiForgeryToken]
         public ActionResult Create(MasterAboutViewModel collection)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(collection); // Pass the collection back so filled data isn't lost
-            }
-
             try
             {
-                // 1. Process files safely (Check for nulls inside FileHelper or handle appropriately)
-                if (collection.ImageFile != null)
+                collection.ImageURL = FileHelper.SaveImage(collection.ImageFile, "MasterAbout");
+                collection.CVURL = FileHelper.SaveDoc(collection.CVFile, "MasterAboutCV");
+                
+                if (collection.ImageURL != "Error" && collection.CVURL != "Error")
                 {
-                    collection.ImageURL = FileHelper.SaveImage(collection.ImageFile, "MasterAbout");
+                    var model = collection.ToModel();
+                    model.CreatedBy = User.Identity?.Name;
+                    Repository.Add(model);
+                    return RedirectToAction(nameof(Index));
                 }
 
-                if (collection.CVFile != null)
-                {
-                    collection.CVURL = FileHelper.SaveDoc(collection.CVFile, "MasterAboutCV");
-                }
 
-                // 2. Validate upload results
-                if (collection.ImageURL == "Error" || collection.CVURL == "Error")
-                {
-                    ModelState.AddModelError("", "Failed to upload files. Please try again.");
-                    return View(collection);
-                }
 
-                // 3. Map and save to database
-                var model = collection.ToModel();
-                model.CreatedBy = User.Identity?.Name ?? "Admin";
-
-                Repository.Add(model);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                // Add exception details to ModelState to display on screen for easy debugging
-                ModelState.AddModelError("", $"An error occurred while saving: {ex.Message}");
                 return View(collection);
             }
-        }
 
-        // GET: MasterAboutController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+
+                return View(collection);
+            }
+
         }
 
         // POST: MasterAboutController/Edit/5
