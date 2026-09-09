@@ -9,7 +9,10 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<div class="table-responsive">
+
+
+<table class="table table-striped table-hover align-middle">
     <thead>
         <tr>
             <th>
@@ -43,8 +46,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
             </th>
-           
-            <th></th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -53,9 +55,12 @@
             <td>
                 @Html.DisplayFor(model => item.Name)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.ImageURL)
-            </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageURL))
+                        {
+                            <img src="@item.ImageURL" alt="@item.Name" style="height:50px;" />
+                        }
+                    </td>
             <td>
                 @Html.DisplayFor(model => item.CVURL)
             </td>
@@ -81,13 +86,12 @@
             <td>
                 @Html.DisplayFor(model => item.IsActive)
             </td>
-           
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                <td class="text-nowrap text-end">
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
             </td>
         </tr>
 }
     </tbody>
-</table>
+    </table>
+</div>

@@ -17,4 +17,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\MasterAboutCV\" />
+    <Folder Include="wwwroot\MasterAbout\" />
+  </ItemGroup>
+
 </Project>

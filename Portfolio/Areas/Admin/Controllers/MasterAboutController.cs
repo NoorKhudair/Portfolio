@@ -28,12 +28,8 @@ namespace Portfolio.Areas.Admin.Controllers
             return View(Repository.GetAll().ToViewModelList());
         }
 
-        // GET: MasterAboutController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+        // GET: MasterAboutController/Edit/5
+   
         // GET: MasterAboutController/Create
         public ActionResult Create()
         {
@@ -73,40 +69,64 @@ namespace Portfolio.Areas.Admin.Controllers
 
         }
 
+        public ActionResult Edit(int id)
+        {
+            var data = Repository.GetById(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            // Map the domain model to the view model to populate the form
+            var viewModel = data.ToViewModel();
+            return View(viewModel);
+        }
+
         // POST: MasterAboutController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, MasterAboutViewModel collection)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var existingModel = Repository.GetById(id);
+                if (existingModel == null)
+                {
+                    return NotFound();
+                }
+
+                // Handle Image replacement (Keep existing if new file isn't uploaded)
+                if (collection.ImageFile != null)
+                {
+                    collection.ImageURL = FileHelper.SaveImage(collection.ImageFile, "MasterAbout");
+                }
+                
+
+                // Handle CV replacement (Keep existing if new file isn't uploaded)
+                if (collection.CVFile != null)
+                {
+                    collection.CVURL = FileHelper.SaveDoc(collection.CVFile, "MasterAboutCV");
+                }
+                
+                if (collection.ImageURL != "Error" && collection.CVURL != "Error")
+                {
+                    var model = collection.ToModel();
+                    model.EditedBy = User.Identity?.Name;
+                    model.EditedAt = DateTime.Now;
+
+                    Repository.Update( model);
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(collection);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                Console.WriteLine(ex.Message);
+                return View(collection);
             }
         }
 
-        // GET: MasterAboutController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: MasterAboutController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

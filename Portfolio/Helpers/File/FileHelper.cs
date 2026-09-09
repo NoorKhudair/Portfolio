@@ -22,7 +22,7 @@ namespace Portfolio.Helpers.File
             if (File != null)
             {
                 List<string> allowedExtensions = new List<string> {
-                                                        ".png", ". jpeg", ".jpg", ".gif"
+                                                        ".png", ".jpeg", ".jpg", ".gif"
                 };
 
 
@@ -36,7 +36,7 @@ namespace Portfolio.Helpers.File
                 FileInfo fileInfo = new FileInfo(File.FileName);
                 // /$!
                 // new.jpg / new (1).jpg
-                var newName = Guid.NewGuid().ToString() + fileInfo.Extension;
+                var newName = Guid.NewGuid().ToString() + fileInfo.Extension.ToLowerInvariant();
                 if (allowedExtensions.Contains(fileInfo.Extension.ToString()))
                 {
 
@@ -70,7 +70,7 @@ namespace Portfolio.Helpers.File
             if (File != null)
             {
                 List<string> allowedExtensions = new List<string> {
-                                                ".pdf", ". doc", ".docx"
+                                                ".pdf", ".doc", ".docx"
 
                 };
 
@@ -85,7 +85,7 @@ namespace Portfolio.Helpers.File
                 FileInfo fileInfo = new FileInfo(File.FileName);
                 // /$!
                 // new.jpg / new (1).jpg
-                var newName = Guid.NewGuid().ToString() + fileInfo.Extension;
+                var newName = Guid.NewGuid().ToString() + fileInfo.Extension.ToLowerInvariant();
                 if (allowedExtensions.Contains(fileInfo.Extension.ToString()))
                 {
 

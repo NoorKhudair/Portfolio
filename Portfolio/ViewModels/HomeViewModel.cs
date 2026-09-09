@@ -8,5 +8,6 @@
         public List<MasterPositionsViewModel> MasterPositions { get; set; }
 
         public List<MasterTitleViewModel> MasterTitle { get; set; }
+
     }
 }
