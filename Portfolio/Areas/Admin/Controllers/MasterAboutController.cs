@@ -95,30 +95,43 @@ namespace Portfolio.Areas.Admin.Controllers
                     return NotFound();
                 }
 
-                // Handle Image replacement (Keep existing if new file isn't uploaded)
+                // Handle Image replacement
                 if (collection.ImageFile != null)
                 {
-                    collection.ImageURL = FileHelper.SaveImage(collection.ImageFile, "MasterAbout");
-                }
-                
+                    var newImageUrl = FileHelper.SaveImage(collection.ImageFile, "MasterAbout");
 
-                // Handle CV replacement (Keep existing if new file isn't uploaded)
+                    if (newImageUrl != "Error")
+                    {
+                        FileHelper.DeleteFile(existingModel.ImageURL); // delete old file after new one saved successfully
+                        existingModel.ImageURL = newImageUrl;
+                    }
+                }
+
+                // Handle CV replacement
                 if (collection.CVFile != null)
                 {
-                    collection.CVURL = FileHelper.SaveDoc(collection.CVFile, "MasterAboutCV");
-                }
-                
-                if (collection.ImageURL != "Error" && collection.CVURL != "Error")
-                {
-                    var model = collection.ToModel();
-                    model.EditedBy = User.Identity?.Name;
-                    model.EditedAt = DateTime.Now;
+                    var newCvUrl = FileHelper.SaveDoc(collection.CVFile, "MasterAboutCV");
 
-                    Repository.Update( model);
-                    return RedirectToAction(nameof(Index));
+                    if (newCvUrl != "Error")
+                    {
+                        FileHelper.DeleteFile(existingModel.CVURL);
+                        existingModel.CVURL = newCvUrl;
+                    }
                 }
 
-                return View(collection);
+                existingModel.Name = collection.Name;
+                existingModel.Desc = collection.Desc;
+                existingModel.Country = collection.Country;
+                existingModel.Address = collection.Address;
+                existingModel.Email = collection.Email;
+                existingModel.Phone = collection.Phone;
+                existingModel.DateOfBirth = collection.DateOfBirth;
+                existingModel.IsActive = collection.IsActive;
+                existingModel.EditedBy = User.Identity?.Name;
+                existingModel.EditedAt = DateTime.Now;
+
+                Repository.Update(existingModel);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -126,7 +139,5 @@ namespace Portfolio.Areas.Admin.Controllers
                 return View(collection);
             }
         }
-
-
     }
 }

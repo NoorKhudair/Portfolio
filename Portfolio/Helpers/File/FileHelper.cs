@@ -112,5 +112,18 @@ namespace Portfolio.Helpers.File
             }
             return FinalName;
         }
+        public void DeleteFile(string relativePath)
+        {
+            if (string.IsNullOrEmpty(relativePath))
+                return;
+
+            // relativePath looks like "/MasterAbout/xxxx.jpg" — strip leading slash for Path.Combine
+            var physicalPath = Path.Combine(_webHostEnvironment.WebRootPath, relativePath.TrimStart('/'));
+
+            if (System.IO.File.Exists(physicalPath))
+            {
+                System.IO.File.Delete(physicalPath);
+            }
+        }
     }
 }

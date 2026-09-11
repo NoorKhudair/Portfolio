@@ -61,9 +61,13 @@
                             <img src="@item.ImageURL" alt="@item.Name" style="height:50px;" />
                         }
                     </td>
-            <td>
-                @Html.DisplayFor(model => item.CVURL)
-            </td>
+            
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.CVURL))
+                        {
+                            <a href="@item.CVURL">Current CV</a>
+                        }
+                    </td>
             <td>
                 @Html.DisplayFor(model => item.Desc)
             </td>
